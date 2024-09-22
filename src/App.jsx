@@ -12,14 +12,6 @@ function App() {
         <Route path="/restaurantmenu/:id" element={<RestaurantMenu />}/>
       </Route>
     </Routes>
-
-    // <>
-    //   <div>
-    //    <Head/>
-    //    <Body/>
-
-    //   </div>
-    // </>
   );
 }
 
