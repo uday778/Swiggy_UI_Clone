@@ -3,8 +3,9 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import RestaurantCard from "./RestaurantCard";
 
 
-function TopResturents({ data }) {
+function TopResturents({ data=[],title }) {
   const [value, setvalue] = useState(0);
+  
  
   
 
@@ -19,7 +20,7 @@ function TopResturents({ data }) {
     <div>
       <div className="flex justify-between ">
         <h1 className="text-2xl font-bold">
-          Top restaurant chains in Hyderabad
+          {title}
         </h1>
         <div className="flex gap-4">
           <div
