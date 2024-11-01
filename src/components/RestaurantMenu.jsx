@@ -8,7 +8,8 @@ import { IoIosArrowDown, IoIosArrowUp, IoIosSearch } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
 import { CartContext, Coordinates } from "../context/contextApi";
 import { useDispatch, useSelector } from "react-redux";
-import { addTocart } from "../utils/cartSlice";
+import { addTocart, clearCart } from "../utils/cartSlice";
+import toast from "react-hot-toast";
 
 
 
@@ -369,7 +370,7 @@ function Detailmenucard({ info, resInfo }) {
   const cartData = useSelector((state) => state.cartSlice.cartItems)
   const dispatch = useDispatch()
   const getResInfoFromLocalStorage = useSelector((state) => state.cartSlice.resInfo)
-  console.log(getResInfoFromLocalStorage);
+  const [isDiffRes,setisDiffRes]=useState(false)
 
 
 
@@ -380,19 +381,34 @@ function Detailmenucard({ info, resInfo }) {
     if (!isAdded) {
       if (getResInfoFromLocalStorage.name === resInfo?.name || getResInfoFromLocalStorage.length === 0) {
         dispatch(addTocart({ info, resInfo }))
+        toast.success("Item Added To Cart")
       }
       else {
-        alert("different restaurent Item")
+        // alert("different restaurent Item")
+        toast.error("Different Restaurant Item")
+        setisDiffRes((prev)=>!prev)
       }
     }
     else {
-      alert("already added to cart");
+      // alert("already added to cart");
+      toast.error("Already Added"
+    )
     }
   }
 
+  function handleIsDiffRes(){
+    setisDiffRes((prev)=>!prev)
+  }
+  function handleClearCart(){
+    dispatch(clearCart())
+    handleIsDiffRes()
+    
+   }
+
 
   return (
-    <div key={id} className="flex      justify-between w-full mt-5 min-h-[182px] ">
+    <div className="relative">
+    <div className="flex      justify-between w-full mt-5 min-h-[182px] ">
       <div className=" w-[70%]">
         <img src={vegClassifier == "VEG" ? veg : nonveg} alt="" className="w-4 rounded-sm" />
         <h2 className="font-bold text-lg ">{name}</h2>
@@ -415,7 +431,26 @@ function Detailmenucard({ info, resInfo }) {
           onClick={handleAddTocart}
         >Add</button>
       </div>
-
+    </div>
+    <hr className="my-5"></hr>
+    {
+      isDiffRes&&(
+        <div className="w-[520px] mx-auto h-[204px] border  fixed bottom-10 shadow-sm left-[35%] p-8 z-10 bg-white">
+          <h1>Items Already In Cart</h1>
+          <p>Your Cart Contain items from other restaurant.
+            would you like to reset your cart for adding items from this restaurant ?
+          </p>
+          <div className="flex   justify-between w-full  uppercase gap-2  p-4  border-2">
+            <button
+            onClick={handleIsDiffRes}
+            className="w-1/2 p-3 border-green-600 text-green-600   border-2">No</button>
+            <button 
+            onClick={handleClearCart}
+            className=" w-1/2 p-3 bg-green-600 text-white border-2">Yes,Start Afresh</button>
+          </div>
+        </div>
+      )
+    }
     </div>
   )
 

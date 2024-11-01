@@ -1,8 +1,9 @@
-import { useContext } from "react"
-import { CartContext } from "../context/contextApi"
+
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart, deleteItem } from "../utils/cartSlice";
+import toast from "react-hot-toast";
+
 
 
 
@@ -19,7 +20,7 @@ function Cart() {
   // }
 
   let totalPrice = cartData.reduce(
-    (acc, curVal) => acc + curVal.price / 100 || curVal.defaultPrice / 100,
+    (acc, curVal) => acc + (curVal.price / 100 || curVal.defaultPrice / 100),
     0
 );
 
@@ -31,19 +32,21 @@ function Cart() {
       dispatch(deleteItem(newArr));
     // setCartData(newarray)
     // localStorage.setItem("cartData",JSON.stringify(newArr)) 
+    toast.success("Item Removed")
+   
     }
     else{
       handleClearCart()
+      toast.success("Your Cart Is Empty")
     }
    
   }
 
- function handleClearCart(){
+  function handleClearCart(){
   dispatch(clearCart())
   // setCartData([])
   // localStorage.setItem("cartData",JSON.stringify([]))
   // localStorage.clear()
-
  }
 
 
@@ -94,4 +97,6 @@ function Cart() {
   )
 }
 
-export default Cart
+export default Cart;
+
+
